@@ -3,19 +3,42 @@
 ## 鸣谢
 
 微信机器人是根据web微信协议开发的，用于实现特定功能（比方自动回复，自动添加好友，自动发群信息）的产品。
-该类产品轮子很多，大家可以自行搜索，本项目是根据wxBot项目![https://github.com/liuwons/wxBot](https://github.com/liuwons/wxBot)深度开发
+该类产品轮子很多，大家可以自行搜索，本项目是根据wxBot项目(https://github.com/liuwons/wxBot)深度开发
+有关wxbot.py代码，也可以参考该项目。
 
-## 使用
-1、安装Python环境（开发环境是Python 3.6），下载本项目main.py程序
+## 新增功能
+1、多用户，多线程，后台运行
 
-2、将系统将分配APPID和APPKEY替换掉代码中的对应值
+2、提供Web界面，方便用户使用
 
-3、[下载ffmpeg软件](https://www.ffmpeg.org/download.html)，用于超长文件的多音频文件合并。
+3、自动保存聊天历史图片和语音
 
-4、准备好文本
+4、可以长时间在线运行
+
+## 文件结构
+
+  - [部署目录] 
+    - [data]      -- 系统配置，用户配置和用户数据目录
+      - robot_config.json  -- 系统配置
+    - [plugin]    -- 插件目录
+    - [static]    -- Web程序，JS，CSS存放目录
+    - [template]  -- Web程序，前端模板目录
+    - daemon.py   -- 后台进程处理
+    - icon.ico    -- web index icon
+    - main.spec   -- 生成单个可执行文件配置
+    - make.cmd    -- 生成单个可执行文件命令
+    - myBot.py    -- 插件功能处理单元
+    - requirements.txt -- 依赖库
+    - robsSrv.py  -- 主服务程序
+    - util.py     -- 通用功能程序
+    - wxbot.py    -- Web微信APi核心单元
+
+## 部署方法
+  git clone 
 
 
-### 使用方法
+## 使用方法
+
 运行程序：python /home/wxRobot/robsSrv.py start|stop|restart
 
 start:启动程序，同时启动web服务，程序后台运行
@@ -33,7 +56,7 @@ Facebook: https://facebook.com/codingtoworld
 
 Twitter：https://twitter.com/codingtoworld
 
-### How to donate?
+## How to donate?
 ![](https://resource.bnbstatic.com/images/20180806/1533543864307_s.png)BitCoin: 1K5apYN4k3UNdymo3qSfRWAehgri3skczQ
 
 ![](https://resource.bnbstatic.com/images/20180806/1533543997535_s.png)ETH:0x1eee99743dfddf6a4b6402047c1946ce9943c965
