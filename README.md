@@ -84,7 +84,7 @@ SRV_LISTEN_PORT=8000
 
 运行程序：
 ```
-python /home/wxRobot/robsSrv.py start|stop|restart
+python /home/wxrobot/robsSrv.py start|stop|restart
 ```
 
 start:启动程序，同时启动web服务，程序后台运行
@@ -101,6 +101,8 @@ restart：重启程序
 Facebook: https://facebook.com/codingtoworld
 
 Twitter：https://twitter.com/codingtoworld
+
+定制开发：联系邮件codingtoworld(AT)GMail.com (AT)替换成@
 
 ## How to donate?
 ![](https://resource.bnbstatic.com/images/20180806/1533543864307_s.png)BitCoin: 1K5apYN4k3UNdymo3qSfRWAehgri3skczQ
