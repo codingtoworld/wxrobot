@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>My Wechat Robots Server</title>
+	<link rel="stylesheet" href="static/style.css">
+	<style>
+	body {
+	  padding-top: 40px;
+	  padding-bottom: 40px;
+	  background-color: #fff;
+	}
+	#modal_show_qrcode,.modal{display:block}
+	#wechat-robot-img{cursor: pointer}
+    .col-centered {
+    display:inline-block;
+    float:none;            
+    margin-right:-4px;
+    }
+    #dropdown_menu{float:right;display:none}
+</style>
+  </head>
+
+  <body>
+
+<div id="modal_show_qrcode" class="modal modal-lg" role="dialog" aria-labelledby="modal_show_qrcode"
+     aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+
+            <div class="btn-group" id="dropdown_menu">
+                <div class="dropdown">
+                  <span class="dropdown-toggle" style="cursor:pointer;color:#666;font-size:16px" id="dropdownMenu6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu"></span>
+                  </span>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu6" style="left:-160px">
+                      <li><a href="wechat">发送信息</a></li>
+                      <li><a href="plugin">设置插件</a></li>
+                      <li><a href="logout">退出登录</a></li>
+                  </ul>
+                </div>
+            </div>
+            <h4 class="panel-title">微信机器人 - {{username}}</h4>
+        </div>
+        <div class="modal-body" style="text-align:center;">
+
+            <div class="form-group col-md-8 col-centered">
+                <img id="wechat-robot-img" src="static/progress.svg" height="240">
+                <p>
+                <label id="wechat_robot_status"><strong>[正在载入]</strong><br />正在载入中，请稍候...</label>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="btn-group">
+            <button class="btn btn-danger" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+  
+
+
+    <script src="static/dependencies.min.js"></script>
+	<script>
+    $(function () {
+		function sleep (time) {
+      		return new Promise((resolve) => setTimeout(resolve, time));
+    	}
+    	function wait4scan(){
+            sleep(5000).then(() => {
+                $.post("weixin/check",function(r){
+                if (r.ret == 0) {
+                    $("#wechat-robot-img").attr('src',roboton);
+                    $("#wechat_robot_status").html('<strong>[运行中]</strong><br />机器人运行中');
+                    $('#dropdown_menu').show();
+                }else{
+                    wait4scan();
+                }
+            });
+        });}
+        // Display the create quote modal
+        $('#modal_show_qrcode').modal('show');
+        var userId = "{{username}}";
+        var roboton = "static/wechat_robot_on.svg";
+        var robotoff = "static/wechat_robot_off.svg";
+        var loadding = "static/loadding.svg";
+        var qrcode_url = "weixin/qrcode?m="+Math.random().toString();
+        //  二维码地址
+      function init(){
+        var load =$.post("weixin/check",{"user_id":userId},function(data){
+            if (data.ret == 0){
+                $("#wechat-robot-img").attr('src',roboton);
+                $("#wechat_robot_status").html('<strong>[运行中]</strong><br />机器人运行中');
+                $('#dropdown_menu').show();
+            }else if(data.ret == 1){
+                $.post(qrcode_url,{"user_id":userId},function(ret){
+                    $("#wechat_robot_status").html('<strong>[等待登录]</strong><br />扫码登录机器人');
+                    $("#wechat-robot-img").attr('src','data:image/png;base64,' +ret);
+                    wait4scan();
+                });
+            }else{
+                $("#wechat-robot-img").attr('src',robotoff);
+                $("#wechat_robot_status").html('<strong>[已停止]</strong><br />机器人已停止，点击图标启动');
+                $("#wechat-robot-img").click(function(){
+                    $("#wechat-robot-img").attr('src',loadding);
+                    $.post("weixin/start",{"user_id":userId},function(dt){
+                         if(dt.ret == 0){
+                         	$("#wechat-robot-img").off("click");
+                            sleep(2500).then(() => {
+                                 $.post(qrcode_url,{"user_id":userId},function(ret){
+                                    $("#wechat_robot_status").html('<strong>[等待登录]</strong><br />扫码登录机器人');
+                                    $("#wechat-robot-img").attr('src','data:image/png;base64,' +ret);
+                                    wait4scan();
+                                 });
+                            });
+                         }
+                    },"json");
+                });
+            }
+        },"json");
+
+        load.fail(function() {
+            $("#wechat-robot-img").attr('src',robotoff);
+            $("#wechat_robot_status").html('<strong>[服务未启动]</strong><br />请联系管理员启动微信机器人');
+        });
+      }
+      init();
+    });
+
+</script>
+
+  </body>
+</html>

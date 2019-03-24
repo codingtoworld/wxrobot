@@ -1,0 +1,1 @@
+c:\python27\Scripts\pyinstaller main.spec

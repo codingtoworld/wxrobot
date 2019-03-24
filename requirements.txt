@@ -1,0 +1,5 @@
+tornado
+requests
+websocket-client
+pyqrcode
+pypng

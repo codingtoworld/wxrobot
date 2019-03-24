@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>微信机器人 - 聊天</title>
+	<link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/bootstrap-treeview.min.css">
+    <link rel="stylesheet" href="static/emoji.css">
+    <link rel="stylesheet" href="static/bootstrap-tagsinput.css">
+    <link href="static/jquery.lighter.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/chat.css">
+  </head>
+
+  <body>
+    <div id="modal_show_wechat" class="modal modal-lg" role="dialog" aria-labelledby="modal_show_wechat"
+         aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="btn-group" id="dropdown_menu">
+                <div class="dropdown">
+                  <span class="dropdown-toggle" style="cursor:pointer;color:#666;font-size:16px" id="dropdownMenu6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu"></span>
+                  </span>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu6" style="left:-160px">
+                      <li><a href="./">首页</a></li>
+                      <li><a href="javascript:void(0);" class="full-window">全窗口</a></li>
+                      <li><a href="plugin">设置插件</a></li>
+                      <li><a href="logout">退出登录</a></li>
+                  </ul>
+                </div>
+            </div>
+                <h4 class="panel-title">微信机器人 - 聊天</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4 padding-tb5-lr5">
+                            <div class="form-group scrollbar-top">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="uSearch" name="search" placeholder="search">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button" id="uSearch-btn">搜</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="scrollbar-light" id="wechat-tree"></div>
+                        </div>
+                        <div class="col-md-8 padding-tb5-lr5">
+
+                              <div class="chat">
+                                  <div class="chat-header clearfix">
+                                          <div class="col-p95">
+                                              <div class="chat-about" id="chat-with-users">
+                                                  <div class="chat-with"><input type="text" /></div>
+                                                  <div class="chat-num-messages"></div>
+                                              </div>
+                                          </div>
+                                          <div class="col-p5 align-items-center">
+                                              <div class="btn-group">
+                                                  <div class="dropdown">
+                                                      <span class="dropdown-toggle" style="cursor:pointer;color:#666;font-size:16px" id="dropdownMenu8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                          <span class="glyphicon glyphicon-circle-down"></span>
+                                                      </span>
+                                                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu8" style="left:-160px">
+                                                          <li><a href="javascript:void(0);" class="remove-all-tag">清空</a></li>
+                                                          <li><a href="javascript:void(0);" class="save-to-group">保存组</a></li>
+                                                      </ul>
+                                                  </div>
+                                              </div>
+
+                                          </div>
+                                  </div><!-- end chat-header -->
+
+                                  <div class="chat-history scrollbar-light" id="wechat-content">
+                                    <ul>
+                                    </ul>
+
+                                  </div> <!-- end chat-history -->
+
+
+                                  <div class="input-group">
+                                     <div class="chat-message clearfix"><textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea></div>
+                                    <span class="input-group-btn">
+                                      <span class="btn-group" style="margin-top:-10px">
+                                          <button type="button" style="height:86px" id="send-btn" class="btn btn-lg btn-success">发送</button>
+                                      </span>
+                                  </span>
+                                </div>
+
+                                </div> <!-- end chat -->
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<script id="message-template" type="text/x-handlebars-template">
+  <li class="clearfix U-${userId}">
+    <div class="message-data align-right">
+      <span class="message-data-time">${time}</span> &nbsp; &nbsp;
+      <span class="message-data-name">我->${toUser}</span> <i class="icon node-icon glyphicon-chat"></i>
+    </div>
+    <div class="message my-message float-right">
+        ${messageOutput}
+    </div>
+  </li>
+</script>
+
+<script id="message-response-template" type="text/x-handlebars-template">
+  <li class="clearfix U-${userId}">
+    <div class="message-data">
+      <span class="message-data-name"><i class="icon node-icon glyphicon-user"></i> ${user}</span>
+      <span class="message-data-time">${time}</span>
+    </div>
+    <div class="message other-message float-left">
+        ${response}
+    </div>
+  </li>
+</script>
+  <script src="static/dependencies.min.js"></script>
+  <script src="static/bootstrap-treeview.min.js"></script>
+  <script src="static/jquery.scrollbar.min.js"></script>
+  <script src="static/bootstrap-tagsinput.min.js"></script>
+  <script src="static/typeahead.min.js"></script>
+  <script src="static/jquery.tmpl.min.js"></script>
+  <script src="static/jquery.lighter.js"></script>
+
+  <script src="static/chat.js"></script>
+  <script>
+    var elt = $('#chat-with-users > > input');
+
+    function sleep (time) {
+      	return new Promise((resolve) => setTimeout(resolve, time));
+    }
+    function show_tree(search){
+        $.post("wechat/treedata",{search:search},function(data){
+            var tree = $('#wechat-tree').treeview({
+                data: data,
+                showIcon: true,
+                showCheckbox: false,
+                //showData:true,
+                onNodeSelected: function(event, node) {
+                    //$(".panel-title").html("微信机器人 - "+node.text);
+                    elt.tagsinput('add', { "value": node.data , "text": node.text   , "sex": node.sex });
+
+                },
+                onNodeChecked: function(event, node) {
+
+                },
+                onNodeUnchecked: function (event, node) {
+
+                }
+            });
+         },"json");
+    }
+    $(function () {
+        $('#modal_show_wechat').modal('show');
+        $('.scrollbar-light').scrollbar();
+
+        $("#uSearch-btn").click(function(){
+            show_tree($('#uSearch').val());
+        });
+        $('#uSearch').keyup(function(e){
+            if(e.keyCode == 13){
+                show_tree($('#uSearch').val());
+            }
+        });
+        show_tree('');
+
+        $(".remove-all-tag").click(function(){
+            elt.tagsinput('removeAll');
+            $("#wechat-content ul li").show();
+        });
+
+        $(".full-window").click(function() {
+            _h = $(window).height();
+            $(".chat .chat-history").height(_h-287);
+            $("div.scrollbar-top + div").height(_h-171);
+        });
+        $(".full-window").click();
+
+        $('input, select').on('change', function(event) {
+            var $element = $(event.target),
+            $container = $element.closest('.chat-with');
+
+            if (!$element.data('tagsinput'))
+                 return;
+
+            var val = $element.val();
+            if (val === null)
+                val = "null";
+            $('code', $('pre.val', $container)).html( ($.isArray(val) ? JSON.stringify(val) : "\"" + val.replace('"', '\\"') + "\"") );
+            $('code', $('pre.items', $container)).html(JSON.stringify($element.tagsinput('items')));
+        }).trigger('change');
+
+        var friends = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: "wechat/treedata?m="+Math.random().toString()
+        });
+        friends.initialize();
+
+
+        elt.tagsinput({
+            tagClass: function(item) {
+                switch (item.sex) {
+                    case 0: return 'label label-default';
+                    case 1: return 'label label-info';
+                    case 2: return 'label label-success';
+                }
+            },
+            itemValue: 'value',
+            itemText: 'text',
+            typeaheadjs: [{
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },{
+                name: 'friends',
+                displayKey: 'text',
+                source: friends.ttAdapter()
+           }]
+
+        });
+    });
+   </script>
+  </body>
+</html>

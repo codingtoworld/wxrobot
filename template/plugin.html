@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>My Wechat plugin settings</title>
+	<link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/jsoneditor.min.css">
+    <link rel="stylesheet" href="static/bootstrap-treeview.min.css">
+	<style>
+	body {
+	  padding-top: 40px;
+	  padding-bottom: 0px;
+	  background-color: #fff;
+	}
+	#modal_show_plugin,.modal{display:block}
+	#plugin-tree{overflow:auto}
+	div.scrollbar-top+div{height:512px;}
+	#dropdown_menu{float:right;}
+    .padding-tb5-lr5{padding: 10px 5px;}
+    </style>
+  </head>
+
+  <body>
+    <div id="modal_show_plugin" class="modal modal-lg" role="dialog" aria-labelledby="modal_show_plugin"
+         aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="btn-group" id="dropdown_menu">
+                <div class="dropdown">
+                  <span class="dropdown-toggle" style="cursor:pointer;color:#666;font-size:16px" id="dropdownMenu6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu"></span>
+                  </span>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu6" style="left:-160px">
+                      <li><a href="./">首页</a></li>
+                      <li><a href="wechat">发送信息</a></li>
+                      <li><a href="logout">退出登录</a></li>
+                  </ul>
+                </div>
+            </div>
+                <h4 class="panel-title">微信机器人 - 插件配置</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4 padding-tb5-lr5">
+                            <div class="scrollbar-top"></div>
+                            <div class="scrollbar-light" id="plugin-tree"></div>
+                        </div>
+                      <div class="col-md-8 padding-tb5-lr5">
+                          <div class="scrollbar-top"></div>
+                          <div class="scrollbar-light" id="jsoneditor"></div>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button class="btn btn-success" type="button" id="btn-save">保存</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script src="static/dependencies.min.js"></script>
+  <script src="static/jsoneditor-minimalist.min.js"></script>
+  <script src="static/bootstrap-treeview.min.js"></script>
+  <script src="static/jquery.scrollbar.min.js"></script>
+  <script>
+    var container = document.getElementById("jsoneditor");
+    var currNodeId = "";
+    var nodeJson = new Array();
+    var editor = new JSONEditor(container, {
+        onChange:function(){
+            nodeJson[currNodeId] = editor.get();
+        },
+        onError:function(){
+            alert("onError");
+        }
+    });
+    function sleep (time) {
+      		return new Promise((resolve) => setTimeout(resolve, time));
+    	}
+    function jsoneditor_data(node)
+    {
+        if(node.state.checked == true){ //右侧调用json编辑器
+            if(currNodeId!="" && currNodeId!=node.nodeId){
+                nodeJson[currNodeId] = editor.get();
+            }
+            currNodeId=node.nodeId;
+
+            if(nodeJson[currNodeId]){
+                editor.set(nodeJson[currNodeId]);
+            }else{
+                $.get("plugin/user?plugin="+node.data,function(data){
+                    nodeJson[currNodeId] = data;
+                    editor.set(data);
+                },"json");
+            }
+            console.log(nodeJson);
+         }
+    }
+    function init_checked_data(){
+        check_list = $('#plugin-tree').treeview("getChecked");  //初始化节点json
+        for (item in check_list){
+            nodeId = check_list[item].nodeId;
+            if (nodeJson[nodeId] == null){
+                $.get("plugin/user", {plugin:check_list[item].data, m:Math.random().toString()}, function(data){
+                        nodeJson[nodeId] = data;
+                        init_checked_data();
+                    },"json");
+                break;
+            }
+        }
+    }
+    $(function () {
+        $('#modal_show_plugin').modal('show');
+        $('.scrollbar-light').scrollbar();
+        $.get("plugin/data",function(data){
+            var tree = $('#plugin-tree').treeview({
+                data: data,
+                showIcon: false,
+                showCheckbox: true,
+                showData:true,
+                onNodeSelected: function(event, node) {
+                    jsoneditor_data(node);
+                },
+                onNodeChecked: function(event, node) {
+                    jsoneditor_data(node);
+                    $('#plugin-tree').treeview('selectNode',[node.nodeId]);
+                },
+                onNodeUnchecked: function (event, node) {
+                    $('#plugin-tree').treeview('unselectNode',[node.nodeId]);
+                }
+            });
+            init_checked_data();
+         },"json");
+
+        // set json
+        var json = {data:"请勾选左测插件，点击后配置！"};
+        editor.set(json);
+        $("#btn-save").click(function(){
+            check_list = $('#plugin-tree').treeview("getChecked");
+            var postData = {};
+            for (item in check_list){
+                nodeId = check_list[item].nodeId;
+                plugin = check_list[item].data
+                if ( nodeJson[nodeId] != null){
+                    plugin_json = JSON.stringify(nodeJson[nodeId], null, 2);
+                }else{
+                    plugin_json = '{}';
+                }
+                postData[plugin] = plugin_json;
+            }
+            console.log(postData);
+            $.post("plugin/user",
+                    postData,
+                    function(d){
+                    alert(d);
+             });
+        });
+    });
+   </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>My Wechat Robots Server</title>
+	<link rel="stylesheet" href="static/style.css">
+	<style>
+body{
+    padding: 50px;
+}
+.modal-dialog {
+    width: 300px;
+}
+.modal-footer {
+    height: 70px;
+    margin: 0;
+}
+.modal-footer .btn {
+    font-weight: bold;
+}
+.modal-footer .progress {
+    display: none;
+    height: 32px;
+    margin: 0;
+}
+.input-group-addon {
+    color: #fff;
+    background: #3276B1;
+}
+
+</style>
+  </head>
+
+  <body>
+
+<div class="modal fade" id="modal_show_login" tabindex="-1" role="dialog" aria-labelledby="modal_show_login" aria-hidden="true">
+    <div class="modal-dialog">
+    <form class="modal-content" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">微信机器人 - 登录</h4>
+        </div>
+
+        <div class="modal-body">
+					<div class="form-group">
+						<div class="input-group">
+							<input type="text" class="form-control" id="uLogin" name="username" placeholder="Login">
+							<label for="uLogin" class="input-group-addon glyphicon glyphicon-user"></label>
+						</div>
+					</div> <!-- /.form-group -->
+
+					<div class="form-group">
+						<div class="input-group">
+							<input type="password" class="form-control" id="uPassword" name="password" placeholder="Password">
+							<label for="uPassword" class="input-group-addon glyphicon glyphicon-lock"></label>
+						</div> <!-- /.input-group -->
+					</div> <!-- /.form-group -->
+
+			</div> <!-- /.modal-body -->
+
+			<div class="modal-footer">
+				<button class="form-control btn btn-primary">登录</button>
+			</div> <!-- /.modal-footer -->
+
+    </form>
+
+</div>
+
+</div>
+
+    <script src="static/dependencies.min.js"></script>
+	<script>
+    $(function () {
+        $('#modal_show_login').modal('show');
+    });
+</script>
+
+  </body>
+</html>
