@@ -5,7 +5,7 @@
 微信机器人是根据web微信协议开发的，用于实现特定功能（比方自动回复，自动添加好友，自动发群信息）的产品。
 该类产品轮子很多，大家可以自行搜索。
 
-本项目是根据wxBot项目(https://github.com/liuwons/wxBot)深度开发，有关wxbot.py代码，也可以参考该项目。
+本项目是根据[wxBot项目](https://github.com/liuwons/wxBot)深度开发，有关wxbot.py代码，也可以参考该项目。
 
 ## 效果演示
 
