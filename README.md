@@ -39,18 +39,20 @@
 
 ## 部署方法(下面说明部署在/home/wxrobot下)
   
-  目前测试在python2.7.5以上版本，3.5以上版本都可以运行
+  目前测试在python2.7.5以上版本，3.5以上版本都可以运行,请自行安装python环境。
   
+  1、下载代码
+  ```
   #cd /home
-  
   #git clone https://github.com/codingtoworld/wxrobot.git
-  
+  ```
   或者直接下载Zip文件，解压缩到/home/wxrobot下
   
-  安装扩展：
+  2、安装扩展：
+  ```
   #cd wxrobot
   #pip -r requirements.txt
-  
+  ```
   也可以使用虚拟环境安装。
 
 ## 配置
@@ -65,12 +67,15 @@
   }
 }
 ```
-上面文件中可以配置多个账户，登陆时使用对应的账户和密码登陆即可。
+上面文件中可以配置多个账户，编辑好配置文件，登陆时使用对应的账户和密码登陆即可。
 
 
 ## 使用方法
 
-运行程序：python /home/wxRobot/robsSrv.py start|stop|restart
+运行程序：
+```
+python /home/wxRobot/robsSrv.py start|stop|restart
+```
 
 start:启动程序，同时启动web服务，程序后台运行
 
