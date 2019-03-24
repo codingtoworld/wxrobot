@@ -19,13 +19,15 @@
 
 
 ### 使用方法
-直接执行：
-python robsSrv.py start|stop|restart
+运行程序：python /home/wxRobot/robsSrv.py start|stop|restart
 
 start:启动程序，同时启动web服务，程序后台运行
+
 stop：停止程序
+
 restart：重启程序
 
+访问方法：浏览器直接输入地址：http://ipaddress:port/
 
 
 ![码上看世界](https://avatars3.githubusercontent.com/u/48540915?s=460&v=4)
@@ -36,4 +38,5 @@ Twitter：https://twitter.com/codingtoworld
 
 ### How to donate?
 ![](https://resource.bnbstatic.com/images/20180806/1533543864307_s.png)BitCoin: 1K5apYN4k3UNdymo3qSfRWAehgri3skczQ
-
+![](https://resource.bnbstatic.com/images/20180806/1533543997535.png)ETH:0x1eee99743dfddf6a4b6402047c1946ce9943c965
+![](https://resource.bnbstatic.com/images/20180810/1533888627851.png)USDT:1KYvKoWDfoY8Xm2VNKoRWC9HgxtV3MbJRp
