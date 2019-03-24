@@ -9,6 +9,7 @@
 
 ## 效果演示
 
+![](https://github.com/codingtoworld/wxrobot/blob/master/static/ezgif.com-video-to-gif.gif?raw=true)
 
 ## 新增功能
 1、多用户，多线程，后台运行
