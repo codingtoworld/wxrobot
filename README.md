@@ -6,6 +6,9 @@
 该类产品轮子很多，大家可以自行搜索，本项目是根据wxBot项目(https://github.com/liuwons/wxBot)深度开发
 有关wxbot.py代码，也可以参考该项目。
 
+## 效果演示
+
+
 ## 新增功能
 1、多用户，多线程，后台运行
 
@@ -33,9 +36,21 @@
     - util.py     -- 通用功能程序
     - wxbot.py    -- Web微信APi核心单元
 
-## 部署方法
-  git clone 
-
+## 部署方法(下面说明部署在/home/wxrobot下)
+  
+  目前测试在python2.7.5以上版本，3.5以上版本都可以运行
+  
+  #cd /home
+  
+  #git clone https://github.com/codingtoworld/wxrobot.git
+  
+  或者直接下载Zip文件，解压缩到/home/wxrobot下
+  
+  安装扩展：
+  #cd wxrobot
+  #pip -r requirements.txt
+  
+  也可以使用虚拟环境安装。
 
 ## 使用方法
 
