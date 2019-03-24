@@ -35,4 +35,5 @@ Facebook: https://facebook.com/codingtoworld
 Twitter：https://twitter.com/codingtoworld
 
 ### How to donate?
-![BitCoin](https://resource.bnbstatic.com/images/20180806/1533543864307_s.png)
+![BitCoin](https://resource.bnbstatic.com/images/20180806/1533543864307_s.png): 1K5apYN4k3UNdymo3qSfRWAehgri3skczQ
+
