@@ -55,6 +55,10 @@
   #pip -r requirements.txt
   ```
   也可以使用虚拟环境安装。
+  目前测试在python2.7.5以上版本，3.5以上版本都可以运行
+  实际测试 python3需要做版本改造.
+  daemon.py: line114 : except OSError, err: => except OSError as err:
+  daemon.py: line56 si = file(self.stdin, 'r') => si = open(self.stdin, 'r')
 
 ## 配置
 
